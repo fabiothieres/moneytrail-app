@@ -32,7 +32,7 @@ export default function Navbar() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/30">
               <TrendingUp size={16} className="text-white" />
             </div>
-            <span className="font-bold text-white text-lg tracking-tight">FinFlow</span>
+            <span className="font-bold text-white text-lg tracking-tight">MoneyTrail</span>
           </div>
 
           {/* Desktop nav */}

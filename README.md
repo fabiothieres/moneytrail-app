@@ -1,4 +1,4 @@
-# FinFlow — Sistema de Gerenciamento Financeiro SaaS
+# MoneyTrail — Sistema de Gerenciamento Financeiro SaaS
 
 > Stack: **React 18 + Vite 5** · **Tailwind CSS** · **Supabase (PostgreSQL + Auth)** · **GitHub Actions**
 
@@ -9,7 +9,7 @@
 ```bash
 # 1. Clone o repositório
 git clone <url-do-repo>
-cd fintech-app
+cd moneytrail
 
 # 2. Instale as dependências
 npm install
@@ -88,7 +88,7 @@ O Supabase pausa projetos gratuitos após **7 dias sem atividade**. O workflow `
 ## 📁 Estrutura do Projeto
 
 ```
-fintech-app/
+moneytrail/
 ├── .github/
 │   └── workflows/
 │       └── keep-alive.yml     # CI: previne hibernação do Supabase

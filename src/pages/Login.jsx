@@ -48,8 +48,8 @@ export default function Login() {
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/40 mb-4">
               <TrendingUp size={28} className="text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-white">FinFlow</h1>
-            <p className="text-sm text-surface-muted mt-1">Gestão financeira inteligente</p>
+            <h1 className="text-2xl font-bold text-white">MoneyTrail</h1>
+            <p className="text-sm text-surface-muted mt-1">A trilha do seu dinheiro</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
