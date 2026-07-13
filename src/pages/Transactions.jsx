@@ -147,17 +147,19 @@ export default function Transactions() {
             {filterMonth ? 'Mês atual' : 'Todos'}
           </button>
 
-          {/* Mock import */}
-          <button
-            onClick={handleMockImport}
-            disabled={mockLoading}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl border border-purple-500/40 bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 disabled:opacity-50 text-sm font-medium transition-all"
-          >
-            {mockLoading
-              ? <><Loader2 size={14} className="animate-spin" /> Importando…</>
-              : <><Zap size={14} /> Mock API</>
-            }
-          </button>
+          {/* Mock import (Apenas admin) */}
+          {user?.email === 'fabio_08cardoso@hotmail.com' && (
+            <button
+              onClick={handleMockImport}
+              disabled={mockLoading}
+              className="flex items-center gap-2 px-3 py-2 rounded-xl border border-purple-500/40 bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 disabled:opacity-50 text-sm font-medium transition-all"
+            >
+              {mockLoading
+                ? <><Loader2 size={14} className="animate-spin" /> Importando…</>
+                : <><Zap size={14} /> Mock API</>
+              }
+            </button>
+          )}
         </div>
       </div>
 
