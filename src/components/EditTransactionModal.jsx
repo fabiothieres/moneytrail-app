@@ -92,7 +92,14 @@ export default function EditTransactionModal({ transaction, categories, onClose,
 
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-surface-border">
-          <h2 className="text-base font-semibold text-white">Editar Transação</h2>
+          <h2 className="text-base font-semibold text-white flex items-center gap-2">
+            Editar Transação
+            {transaction.is_installment && (
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                {transaction.installment_current}/{transaction.installment_total}
+              </span>
+            )}
+          </h2>
           <button
             onClick={onClose}
             className="p-2 rounded-lg text-surface-muted hover:text-white hover:bg-white/5 transition-colors"

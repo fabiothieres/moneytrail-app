@@ -116,7 +116,14 @@ export default function TransactionList({ transactions = [], categories = [], lo
                 return (
                   <tr key={tx.id} className="hover:bg-white/3 transition-colors animate-fade-in">
                     <td className="px-4 py-3 text-white font-medium max-w-[140px] truncate">
-                      {tx.description || '—'}
+                      <div className="flex items-center gap-2">
+                        <span className="truncate">{tx.description || '—'}</span>
+                        {tx.is_installment && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-purple-500/20 text-purple-400 border border-purple-500/30 whitespace-nowrap">
+                            {tx.installment_current}/{tx.installment_total}
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3 text-surface-muted text-xs">
                       {tx.categories?.name ?? '—'}

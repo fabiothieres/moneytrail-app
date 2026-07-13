@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import { Plus, Loader2 } from 'lucide-react'
+import { addMonths, format } from 'date-fns'
 
 const INCOME_SUBTYPES = [
   { value: 'fixed',    label: 'Fixa'     },
@@ -29,6 +30,9 @@ export default function TransactionForm({ onSuccess }) {
     status:         'confirmed',
     income_subtype: '',
     expense_subtype:'',
+    is_installment: false,
+    installment_current: 1,
+    installment_total: 12,
   })
 
   useEffect(() => {
@@ -63,24 +67,64 @@ export default function TransactionForm({ onSuccess }) {
     }
 
     setLoading(true)
-    const { error } = await supabase.from('transactions').insert({
+
+    // Base info
+    const baseRecord = {
       user_id:         user.id,
       type:            form.type,
       amount:          Number(form.amount),
       category_id:     form.category_id || null,
-      date:            form.date,
       description:     form.description,
       status:          form.status,
       income_subtype:  form.type === 'income'  ? (form.income_subtype  || null) : null,
       expense_subtype: form.type === 'expense' ? (form.expense_subtype || null) : null,
-    })
+    }
+
+    let records = []
+    
+    if (form.is_installment && Number(form.installment_total) > 0) {
+      let start = Number(form.installment_current) || 1
+      let total = Number(form.installment_total) || 1
+      let baseDate = new Date(form.date + 'T00:00:00') // evita fuso horário deslocando a data
+
+      for (let i = start; i <= total; i++) {
+        let currentRecordDate = addMonths(baseDate, i - start)
+        records.push({
+          ...baseRecord,
+          date:                format(currentRecordDate, 'yyyy-MM-dd'),
+          is_installment:      true,
+          installment_current: i,
+          installment_total:   total,
+        })
+      }
+    } else {
+      records.push({
+        ...baseRecord,
+        date:                form.date,
+        is_installment:      false,
+        installment_current: null,
+        installment_total:   null,
+      })
+    }
+
+    const { error } = await supabase.from('transactions').insert(records)
     setLoading(false)
 
     if (error) {
       toast.error('Erro ao salvar transação: ' + error.message)
     } else {
-      toast.success('Transação adicionada!')
-      setForm(prev => ({ ...prev, amount: '', description: '', category_id: '', income_subtype: '', expense_subtype: '' }))
+      toast.success(records.length > 1 ? `${records.length} parcelas adicionadas!` : 'Transação adicionada!')
+      setForm(prev => ({ 
+        ...prev, 
+        amount: '', 
+        description: '', 
+        category_id: '', 
+        income_subtype: '', 
+        expense_subtype: '',
+        is_installment: false,
+        installment_current: 1,
+        installment_total: 12
+      }))
       onSuccess?.()
     }
   }
@@ -154,7 +198,7 @@ export default function TransactionForm({ onSuccess }) {
           />
         </div>
         <div>
-          <label className={labelClass}>Data</label>
+          <label className={labelClass}>Data (1ª parcela)</label>
           <input
             type="date"
             name="date"
@@ -165,6 +209,65 @@ export default function TransactionForm({ onSuccess }) {
           />
         </div>
       </div>
+
+      {/* Modo de Pagamento: À vista vs Parcelado */}
+      <div>
+        <label className={labelClass}>Pagamento</label>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setForm(prev => ({ ...prev, is_installment: false }))}
+            className={`py-2 rounded-xl text-xs font-medium transition-all duration-200 border ${
+              !form.is_installment
+                ? 'bg-brand-500/20 text-brand-400 border-brand-500/40'
+                : 'bg-surface border-surface-border text-surface-muted hover:text-white'
+            }`}
+          >
+            À Vista
+          </button>
+          <button
+            type="button"
+            onClick={() => setForm(prev => ({ ...prev, is_installment: true }))}
+            className={`py-2 rounded-xl text-xs font-medium transition-all duration-200 border ${
+              form.is_installment
+                ? 'bg-purple-500/20 text-purple-400 border-purple-500/40'
+                : 'bg-surface border-surface-border text-surface-muted hover:text-white'
+            }`}
+          >
+            Parcelado
+          </button>
+        </div>
+      </div>
+
+      {/* Campos de Parcelamento */}
+      {form.is_installment && (
+        <div className="grid grid-cols-2 gap-4 animate-fade-in bg-purple-500/5 p-3 rounded-xl border border-purple-500/10">
+          <div>
+            <label className={labelClass}>Parcela Inicial</label>
+            <input
+              type="number"
+              name="installment_current"
+              min="1"
+              value={form.installment_current}
+              onChange={handleChange}
+              className={inputClass}
+              required
+            />
+          </div>
+          <div>
+            <label className={labelClass}>Total de Parcelas</label>
+            <input
+              type="number"
+              name="installment_total"
+              min="1"
+              value={form.installment_total}
+              onChange={handleChange}
+              className={inputClass}
+              required
+            />
+          </div>
+        </div>
+      )}
 
       {/* Categoria */}
       <div>
