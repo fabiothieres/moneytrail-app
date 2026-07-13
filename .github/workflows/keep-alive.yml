@@ -1,0 +1,60 @@
+name: Keep Supabase Alive
+
+# ─────────────────────────────────────────────────────────────
+# Previne a hibernação automática do banco de dados gratuito
+# do Supabase (inativo por >7 dias → pausado automaticamente).
+#
+# Estratégia: pinga o endpoint REST da tabela 'categories'
+# a cada 4 dias — dentro do limite de 7 dias de inatividade.
+#
+# Secrets necessários no repositório (Settings → Secrets):
+#   SUPABASE_URL      → ex.: https://xxxxxxxxxxx.supabase.co
+#   SUPABASE_ANON_KEY → chave anon pública do seu projeto
+# ─────────────────────────────────────────────────────────────
+
+on:
+  schedule:
+    # Executa às 00:00 UTC a cada 4 dias (dias 1, 5, 9, 13…)
+    - cron: '0 0 */4 * *'
+
+  # Permite disparo manual via GitHub UI
+  workflow_dispatch:
+
+jobs:
+  ping-supabase:
+    name: Ping Supabase DB
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Health check — Supabase REST API
+        env:
+          SUPABASE_URL:      ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: |
+          echo "🏓 Enviando ping para Supabase em $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+
+          HTTP_STATUS=$(curl \
+            --silent \
+            --output /dev/null \
+            --write-out "%{http_code}" \
+            --max-time 30 \
+            --header "apikey: ${SUPABASE_ANON_KEY}" \
+            --header "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            "${SUPABASE_URL}/rest/v1/categories?select=id&limit=1")
+
+          echo "HTTP Status: ${HTTP_STATUS}"
+
+          if [ "${HTTP_STATUS}" -ge 200 ] && [ "${HTTP_STATUS}" -lt 300 ]; then
+            echo "✅ Supabase respondeu com sucesso (${HTTP_STATUS})"
+          elif [ "${HTTP_STATUS}" -eq 401 ] || [ "${HTTP_STATUS}" -eq 403 ]; then
+            # 401/403 ainda significa que o banco está ACORDADO — RLS restringiu sem usuário
+            echo "✅ Banco acordado — acesso negado por RLS (esperado sem JWT): ${HTTP_STATUS}"
+          else
+            echo "❌ Falha no ping. HTTP: ${HTTP_STATUS}"
+            exit 1
+          fi
+
+      - name: Registrar resultado
+        if: always()
+        run: echo "Ping concluído em $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
