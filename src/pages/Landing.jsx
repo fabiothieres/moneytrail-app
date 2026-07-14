@@ -85,29 +85,18 @@ export default function Landing() {
           </Link>
 
           <div className="flex items-center gap-3">
-            {user ? (
-              <Link
-                to="/"
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/40"
-              >
-                Ir ao Dashboard <ArrowRight size={16} />
-              </Link>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  className="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:text-white transition-colors"
-                >
-                  Entrar
-                </Link>
-                <Link
-                  to="/register"
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/40"
-                >
-                  Começar Agora <ArrowRight size={16} />
-                </Link>
-              </>
-            )}
+            <Link
+              to="/login"
+              className="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:text-white transition-colors"
+            >
+              Entrar
+            </Link>
+            <Link
+              to="/register"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-400 hover:to-brand-500 text-white font-semibold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-brand-500/40"
+            >
+              Começar Agora <ArrowRight size={16} />
+            </Link>
           </div>
         </div>
       </nav>
