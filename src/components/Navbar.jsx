@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, ArrowLeftRight, LogOut, Menu, X, TrendingUp, Tag, BarChart2 } from 'lucide-react'
+import { LayoutDashboard, ArrowLeftRight, LogOut, Menu, X, Banknote, Tag, BarChart2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 
@@ -30,7 +30,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/30">
-              <TrendingUp size={16} className="text-white" />
+              <Banknote size={16} className="text-white" />
             </div>
             <span className="font-bold text-white text-lg tracking-tight">MoneyTrail</span>
           </div>

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import {
-  TrendingUp, ArrowRight, Shield, BarChart3, CreditCard,
+  Banknote, ArrowRight, Shield, BarChart3, CreditCard,
   Wallet, PieChart, Calendar, ChevronRight, Zap, Star,
   CheckCircle2, Sparkles
 } from 'lucide-react'
@@ -79,7 +79,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/30 group-hover:shadow-brand-500/50 transition-shadow">
-              <TrendingUp size={20} className="text-white" />
+              <Banknote size={20} className="text-white" />
             </div>
             <span className="text-lg font-bold tracking-tight">MoneyTrail</span>
           </Link>
@@ -334,7 +334,7 @@ export default function Landing() {
         <div className="relative max-w-3xl mx-auto px-6 text-center">
           <div className="bg-surface-card/80 backdrop-blur-xl border border-white/10 rounded-3xl p-10 sm:p-14 shadow-2xl shadow-black/30">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center mx-auto mb-6 shadow-lg shadow-brand-500/40">
-              <TrendingUp size={32} className="text-white" />
+              <Banknote size={32} className="text-white" />
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-3">
               Pronto para organizar suas finanças?
@@ -361,7 +361,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center">
-              <TrendingUp size={14} className="text-white" />
+              <Banknote size={14} className="text-white" />
             </div>
             <span className="text-sm font-semibold text-slate-400">MoneyTrail</span>
           </div>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
-import { Loader2, TrendingUp, Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { Loader2, Banknote, Mail, Lock, Eye, EyeOff } from 'lucide-react'
 
 export default function Login() {
   const { signIn } = useAuth()
@@ -46,7 +46,7 @@ export default function Login() {
           {/* Logo */}
           <div className="flex flex-col items-center mb-8">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/40 mb-4">
-              <TrendingUp size={28} className="text-white" />
+              <Banknote size={28} className="text-white" />
             </div>
             <h1 className="text-2xl font-bold text-white">MoneyTrail</h1>
             <p className="text-sm text-surface-muted mt-1">A trilha do seu dinheiro</p>
