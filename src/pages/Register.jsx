@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
-import { Loader2, TrendingUp, Mail, Lock, Eye, EyeOff, UserPlus } from 'lucide-react'
+import { Loader2, Mail, Lock, Eye, EyeOff, UserPlus } from 'lucide-react'
 
 export default function Register() {
   const { signUp } = useAuth()

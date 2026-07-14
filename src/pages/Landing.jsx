@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import {
   Banknote, ArrowRight, Shield, BarChart3, CreditCard,
   Wallet, PieChart, Calendar, ChevronRight, Zap, Star,
-  CheckCircle2, Sparkles
+  CheckCircle2, Sparkles, TrendingUp
 } from 'lucide-react'
 
 /* ── Dados das seções ─────────────────────────────────────── */
