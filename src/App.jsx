@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
+import Landing      from './pages/Landing'
 import Login        from './pages/Login'
 import Register     from './pages/Register'
 import Dashboard    from './pages/Dashboard'
@@ -30,12 +31,15 @@ export default function App() {
         />
 
         <Routes>
-          {/* Públicas */}
+          {/* Landing page pública */}
+          <Route path="/"         element={<Landing />}  />
+
+          {/* Auth */}
           <Route path="/login"    element={<Login />}    />
           <Route path="/register" element={<Register />} />
 
           {/* Protegidas */}
-          <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/dashboard"    element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
           <Route path="/categories"   element={<ProtectedRoute><Categories /></ProtectedRoute>} />
           <Route path="/analytics"    element={<ProtectedRoute><Analytics /></ProtectedRoute>} />

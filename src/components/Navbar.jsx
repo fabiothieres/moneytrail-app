@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 
 const NAV_ITEMS = [
-  { to: '/',             label: 'Dashboard',    Icon: LayoutDashboard },
+  { to: '/dashboard',    label: 'Dashboard',    Icon: LayoutDashboard },
   { to: '/transactions', label: 'Transações',   Icon: ArrowLeftRight  },
   { to: '/categories',   label: 'Categorias',   Icon: Tag             },
   { to: '/analytics',    label: 'Gráficos',     Icon: BarChart2       },
@@ -41,7 +41,7 @@ export default function Navbar() {
               <NavLink
                 key={to}
                 to={to}
-                end={to === '/'}
+                end={to === '/dashboard'}
                 className={({ isActive }) =>
                   `flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                     isActive
@@ -86,7 +86,7 @@ export default function Navbar() {
               <NavLink
                 key={to}
                 to={to}
-                end={to === '/'}
+                end={to === '/dashboard'}
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
                   `flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${

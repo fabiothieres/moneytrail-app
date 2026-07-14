@@ -25,7 +25,7 @@ export default function Login() {
       )
     } else {
       toast.success('Bem-vindo de volta! 🎉')
-      navigate('/')
+      navigate('/dashboard')
     }
   }
 
