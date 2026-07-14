@@ -17,10 +17,11 @@ const MOCK_TRANSACTIONS = [
 
 const PAGE_SIZE = 20
 
-function currentMonthRange() {
-  const now   = new Date()
-  const start = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().slice(0, 10)
-  const end   = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().slice(0, 10)
+function getMonthRange(monthStr) {
+  if (!monthStr) return null
+  const [y, m] = monthStr.split('-').map(Number)
+  const start = new Date(y, m - 1, 1).toISOString().slice(0, 10)
+  const end = new Date(y, m, 0).toISOString().slice(0, 10)
   return { start, end }
 }
 
@@ -39,7 +40,7 @@ export default function Transactions() {
   const [loading,      setLoading]      = useState(true)
   const [page,         setPage]         = useState(1)
   const [totalPages,   setTotalPages]   = useState(1)
-  const [filterMonth,  setFilterMonth]  = useState(true)
+  const [selectedMonth,setSelectedMonth]= useState(new Date().toISOString().slice(0, 7))
   const [typeFilter,   setTypeFilter]   = useState('all')   // 'all' | 'income' | 'expense'
   const [mockLoading,  setMockLoading]  = useState(false)
 
@@ -69,8 +70,8 @@ export default function Transactions() {
       .order('created_at', { ascending: false })
       .range(from, to)
 
-    if (filterMonth) {
-      const { start, end } = currentMonthRange()
+    if (selectedMonth) {
+      const { start, end } = getMonthRange(selectedMonth)
       query = query.gte('date', start).lte('date', end)
     }
 
@@ -90,7 +91,7 @@ export default function Transactions() {
     }
 
     setLoading(false)
-  }, [user, filterMonth, typeFilter])
+  }, [user, selectedMonth, typeFilter])
 
   useEffect(() => { fetchTransactions(1) }, [fetchTransactions])
 
@@ -128,23 +129,33 @@ export default function Transactions() {
         <div>
           <h1 className="text-2xl font-bold text-white">Transações</h1>
           <p className="text-sm text-surface-muted mt-1">
-            {filterMonth ? 'Mês atual' : 'Todos os períodos'}
+            {selectedMonth ? `Período: ${selectedMonth.split('-').reverse().join('/')}` : 'Todos os períodos'}
             {typeFilter !== 'all' && ` · ${typeFilter === 'income' ? 'Somente entradas' : 'Somente saídas'}`}
           </p>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
           {/* Filtro de mês */}
+          <div className="flex items-center gap-2 bg-surface border border-surface-border rounded-xl px-3 py-1.5 focus-within:border-brand-500 focus-within:ring-1 focus-within:ring-brand-500 transition-all h-[38px]">
+            <Filter size={14} className="text-surface-muted" />
+            <input
+              type="month"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="bg-transparent text-sm text-white focus:outline-none [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
+            />
+          </div>
+          
+          {/* Botão Ver Todos */}
           <button
-            onClick={() => setFilterMonth(p => !p)}
-            className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium transition-all ${
-              filterMonth
+            onClick={() => setSelectedMonth(selectedMonth ? '' : new Date().toISOString().slice(0, 7))}
+            className={`px-3 py-2 rounded-xl border text-sm font-medium transition-all h-[38px] ${
+              !selectedMonth
                 ? 'bg-brand-500/20 border-brand-500/40 text-brand-400'
                 : 'border-surface-border text-surface-muted hover:text-white'
             }`}
           >
-            <Filter size={14} />
-            {filterMonth ? 'Mês atual' : 'Todos'}
+            Ver Todos
           </button>
 
           {/* Mock import (Apenas admin) */}

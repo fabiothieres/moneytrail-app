@@ -4,7 +4,7 @@ import StatCard from '../components/StatCard'
 import { supabase } from '../lib/supabase'
 import {
   Wallet, TrendingUp, TrendingDown, BarChart3,
-  CalendarDays, RefreshCw
+  CalendarDays, RefreshCw, Filter
 } from 'lucide-react'
 
 function formatBRL(n = 0) {
@@ -20,9 +20,16 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState(null)
 
+  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7))
+
   const fetchSummary = useCallback(async () => {
     setLoading(true)
-    const { data, error } = await supabase.rpc('get_financial_summary')
+    let args = {}
+    if (selectedMonth) {
+      const [y, m] = selectedMonth.split('-')
+      args = { p_year: parseInt(y), p_month: parseInt(m) }
+    }
+    const { data, error } = await supabase.rpc('get_financial_summary', args)
     if (!error && data) {
       setSummary(data)
       setLastUpdated(new Date())
@@ -30,7 +37,7 @@ export default function Dashboard() {
     setLoading(false)
   }, [])
 
-  useEffect(() => { fetchSummary() }, [fetchSummary])
+  useEffect(() => { fetchSummary() }, [fetchSummary, selectedMonth])
 
   const stats = summary
     ? [
@@ -91,14 +98,27 @@ export default function Dashboard() {
             {lastUpdated && ` às ${lastUpdated.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`}
           </p>
         </div>
-        <button
-          onClick={fetchSummary}
-          disabled={loading}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl border border-surface-border text-surface-muted hover:text-white hover:border-brand-500 disabled:opacity-40 transition-all text-sm"
-        >
-          <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-          Atualizar
-        </button>
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-2 bg-surface border border-surface-border rounded-xl px-3 py-1.5 focus-within:border-brand-500 focus-within:ring-1 focus-within:ring-brand-500 transition-all">
+            <Filter size={14} className="text-surface-muted" />
+            <input
+              type="month"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+              className="bg-transparent text-sm text-white focus:outline-none [&::-webkit-calendar-picker-indicator]:filter [&::-webkit-calendar-picker-indicator]:invert"
+            />
+            {!selectedMonth && <span className="text-xs text-surface-muted ml-1">(Exibindo mês atual)</span>}
+          </div>
+
+          <button
+            onClick={fetchSummary}
+            disabled={loading}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-surface-border text-surface-muted hover:text-white hover:border-brand-500 disabled:opacity-40 transition-all text-sm h-[38px]"
+          >
+            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+            Atualizar
+          </button>
+        </div>
       </div>
 
       {/* Cards — grid 3x2 */}
