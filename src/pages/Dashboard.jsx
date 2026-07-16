@@ -35,7 +35,7 @@ export default function Dashboard() {
       setLastUpdated(new Date())
     }
     setLoading(false)
-  }, [])
+  }, [selectedMonth])
 
   useEffect(() => { fetchSummary() }, [fetchSummary, selectedMonth])
 
