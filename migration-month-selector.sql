@@ -10,13 +10,16 @@ declare
   v_total_expense numeric := 0;
   v_month_income  numeric := 0;
   v_month_expense numeric := 0;
-  v_target_date   date;
+  v_target_year   int;
+  v_target_month  int;
 begin
 
   if p_year is null or p_month is null then
-    v_target_date := current_date;
+    v_target_year  := extract(year from current_date);
+    v_target_month := extract(month from current_date);
   else
-    v_target_date := make_date(p_year, p_month, 1);
+    v_target_year  := p_year;
+    v_target_month := p_month;
   end if;
 
   select
@@ -34,7 +37,8 @@ begin
   from public.transactions
   where user_id = v_uid
     and status  = 'confirmed'
-    and date_trunc('month', date) = date_trunc('month', v_target_date);
+    and extract(year from date) = v_target_year
+    and extract(month from date) = v_target_month;
 
   return json_build_object(
     'total_income',   v_total_income,
