@@ -104,7 +104,7 @@ create policy "transactions: delete own"
 --    Retorna o saldo consolidado e do mês atual do usuário
 --    (evita SELECT * irrestrito — só retorna agregados)
 -- ─────────────────────────────────────────────────────────────
-create or replace function public.get_financial_summary()
+create or replace function public.get_financial_summary(p_year int default null, p_month int default null)
 returns json
 language plpgsql
 security definer
@@ -116,12 +116,20 @@ declare
   v_total_expense numeric := 0;
   v_month_income  numeric := 0;
   v_month_expense numeric := 0;
+  v_target_year   int;
+  v_target_month  int;
 begin
 
+  -- Determinar a data alvo baseada nos parâmetros
+  if p_year is null or p_month is null then
+    v_target_year  := extract(year from current_date);
+    v_target_month := extract(month from current_date);
+  else
+    v_target_year  := p_year;
+    v_target_month := p_month;
+  end if;
+
   -- Totais consolidados
-  select
-    coalesce(sum(case when type = 'income'  then amount else 0 end), 0),
-    coalesce(sum(case when type = 'expense' then amount else 0 end), 0)
   into v_total_income, v_total_expense
   from public.transactions
   where user_id = v_uid
@@ -135,7 +143,8 @@ begin
   from public.transactions
   where user_id = v_uid
     and status  = 'confirmed'
-    and date_trunc('month', date) = date_trunc('month', current_date);
+    and extract(year from date) = v_target_year
+    and extract(month from date) = v_target_month;
 
   return json_build_object(
     'total_income',   v_total_income,
