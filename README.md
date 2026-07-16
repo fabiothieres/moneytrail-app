@@ -1,6 +1,16 @@
 # MoneyTrail — Sistema de Gerenciamento Financeiro SaaS
 
-> Stack: **React 18 + Vite 5** · **Tailwind CSS** · **Supabase (PostgreSQL + Auth)** · **GitHub Actions**
+<div align="center">
+  <img src="./public/favicon.svg" alt="MoneyTrail Logo" width="80" height="80" />
+  <p><strong>A trilha do seu dinheiro. Gestão financeira inteligente, segura e gratuita.</strong></p>
+</div>
+
+<img width="1920" height="1033" alt="image" src="https://github.com/user-attachments/assets/c892294c-6de3-4160-8744-930a5b96148c" />
+
+
+**MoneyTrail** é uma aplicação web full-stack focada no controle financeiro pessoal e empresarial. Projetado para ser intuitivo e direto ao ponto, o sistema oferece desde o registro simples de receitas e despesas até a automação do cálculo de parcelamentos em meses futuros, tudo protegido por uma arquitetura serverless robusta.
+
+🌐 **Acesse ao vivo:** [moneytrail-fabio.vercel.app](https://moneytrail-fabio.vercel.app/)
 
 ---
 
@@ -45,20 +55,10 @@ O script criará automaticamente:
 Todas as tabelas possuem RLS ativo com a política:
 
 ```sql
--- Exemplo: transactions
 USING (auth.uid() = user_id)
 ```
 
-Isso significa que **mesmo que o front-end faça uma query sem filtro**, o PostgreSQL só retornará os registros do usuário autenticado pelo JWT. O front-end não tem autoridade — a segurança está no banco de dados.
-
-### Proteção de Cota de Leituras
-
-| Estratégia | Implementação |
-|---|---|
-| **Paginação** | Máx. 20 itens por query (`.range()` no Supabase) |
-| **Filtro de mês** | Dashboard e Transações filtram por mês atual por padrão |
-| **RPC agregado** | Dashboard usa `get_financial_summary()` — 1 chamada, sem `SELECT *` |
-| **Sem wildcards** | Todas as queries têm colunas explícitas ou são chamadas de função |
+Isso significa que **mesmo que o front-end faça uma query sem filtro**, o PostgreSQL só retornará os registros do usuário autenticado pelo JWT.
 
 ### Variáveis de Ambiente
 
@@ -68,7 +68,6 @@ VITE_SUPABASE_ANON_KEY=eyJhbGci...
 ```
 
 > ⚠️ **Nunca commite o arquivo `.env`!** Use `.env.example` como template.
-> A chave `anon` é segura para o front-end pois o RLS protege os dados no banco.
 
 ---
 
@@ -76,83 +75,28 @@ VITE_SUPABASE_ANON_KEY=eyJhbGci...
 
 O Supabase pausa projetos gratuitos após **7 dias sem atividade**. O workflow `.github/workflows/keep-alive.yml` executa automaticamente a cada **4 dias** e faz um ping na API REST do Supabase.
 
-### Configurar Secrets no GitHub
-
-1. Vá em **Settings → Secrets and variables → Actions**
-2. Adicione:
-   - `SUPABASE_URL` → URL do seu projeto Supabase
-   - `SUPABASE_ANON_KEY` → Chave anon pública
-
----
-
-## 📁 Estrutura do Projeto
-
-```
-moneytrail/
-├── .github/
-│   └── workflows/
-│       └── keep-alive.yml     # CI: previne hibernação do Supabase
-├── src/
-│   ├── components/
-│   │   ├── Layout.jsx         # Layout wrapper com Navbar
-│   │   ├── Navbar.jsx         # Navegação responsiva com glassmorphism
-│   │   ├── ProtectedRoute.jsx # Guard para rotas privadas
-│   │   ├── StatCard.jsx       # Card KPI com animações
-│   │   ├── TransactionForm.jsx# Formulário de inserção rápida
-│   │   └── TransactionList.jsx# Lista paginada com tabela
-│   ├── context/
-│   │   └── AuthContext.jsx    # Gerenciamento de sessão Supabase
-│   ├── lib/
-│   │   └── supabase.js        # Cliente Supabase singleton
-│   ├── pages/
-│   │   ├── Login.jsx          # Tela de login
-│   │   ├── Register.jsx       # Tela de cadastro
-│   │   ├── Dashboard.jsx      # KPIs via RPC
-│   │   └── Transactions.jsx   # CRUD + Mock API
-│   ├── App.jsx                # Rotas e providers
-│   ├── main.jsx               # Entry point React
-│   └── index.css              # Tailwind + fontes globais
-├── database-setup.sql         # DDL completo com RLS
-├── .env.example               # Template de variáveis
-├── tailwind.config.js
-├── postcss.config.js
-└── vite.config.js
-```
-
----
-
-## 🧪 Mock API
-
-Na página **Transações**, o botão **⚡ Mock API** importa 5 transações de demonstração diretamente para o banco via insert em lote:
-
-```js
-// src/pages/Transactions.jsx
-const MOCK_TRANSACTIONS = [
-  { type: 'income',  amount: 5000.00, description: 'Salário Julho',       ... },
-  { type: 'expense', amount:  850.00, description: 'Aluguel',             ... },
-  { type: 'expense', amount:  320.50, description: 'Supermercado',        ... },
-  { type: 'income',  amount:  750.00, description: 'Freelance Design',    ... },
-  { type: 'expense', amount:   99.90, description: 'Assinatura Adobe CC', ... },
-]
-```
-
 ---
 
 ## 📦 Dependências Principais
 
-| Pacote | Versão | Função |
-|---|---|---|
-| `react` | 18 | UI library |
-| `vite` | 5 | Build tool |
-| `tailwindcss` | 3 | Estilização utilitária |
-| `react-router-dom` | 6 | Roteamento SPA |
-| `@supabase/supabase-js` | latest | Cliente Supabase |
-| `lucide-react` | latest | Ícones SVG |
-| `react-hot-toast` | latest | Notificações toast |
-| `date-fns` | latest | Formatação de datas |
+| Pacote | Função |
+|---|---|
+| `react` | UI library |
+| `vite` | Build tool |
+| `tailwindcss` | Estilização utilitária |
+| `react-router-dom` | Roteamento SPA |
+| `@supabase/supabase-js` | Cliente Supabase |
+| `lucide-react` | Ícones SVG |
+| `react-hot-toast` | Notificações toast |
+| `recharts` | Gráficos interativos |
+| `date-fns` | Formatação de datas |
 
 ---
 
 ## 📄 Licença
 
 MIT — livre para uso pessoal e comercial.
+
+<div align="center">
+  Desenvolvido por <a href="https://www.linkedin.com/in/fabio-thieres-00b320265/" target="_blank">Fabio Thieres</a>
+</div>
