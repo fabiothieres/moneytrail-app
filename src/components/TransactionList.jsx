@@ -47,17 +47,6 @@ function SubtypeBadge({ tx }) {
   )
 }
 
-/**
- * TransactionList — Lista paginada com edição e exclusão.
- * Props:
- *  - transactions: array
- *  - categories:   array  (para o modal de edição)
- *  - loading:      boolean
- *  - page:         number
- *  - totalPages:   number
- *  - onPageChange: (page) => void
- *  - onRefresh:    () => void
- */
 export default function TransactionList({ transactions = [], categories = [], loading, page, totalPages, onPageChange, onRefresh }) {
   const [editing,   setEditing]   = useState(null)   // transação sendo editada
   const [deletingId, setDeletingId] = useState(null) // id sendo deletado
@@ -143,7 +132,6 @@ export default function TransactionList({ transactions = [], categories = [], lo
                     <td className={`px-4 py-3 font-semibold whitespace-nowrap ${isIncome ? 'text-emerald-400' : 'text-red-400'}`}>
                       {isIncome ? '+' : '−'} {formatBRL(tx.amount)}
                     </td>
-                    {/* Ações */}
                     <td className="px-3 py-3">
                       <div className="flex items-center gap-1">
                         <button
@@ -193,7 +181,6 @@ export default function TransactionList({ transactions = [], categories = [], lo
         )}
       </div>
 
-      {/* Modal de edição */}
       {editing && (
         <EditTransactionModal
           transaction={editing}

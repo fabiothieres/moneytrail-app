@@ -68,7 +68,6 @@ export default function TransactionForm({ onSuccess }) {
 
     setLoading(true)
 
-    // Base info
     const baseRecord = {
       user_id:         user.id,
       type:            form.type,
@@ -140,7 +139,6 @@ export default function TransactionForm({ onSuccess }) {
     <form onSubmit={handleSubmit} className="bg-surface-card border border-surface-border rounded-2xl p-6 space-y-5 animate-slide-up">
       <h2 className="text-base font-semibold text-white">Nova Transação</h2>
 
-      {/* Tipo entrada/saída */}
       <div className="grid grid-cols-2 gap-2">
         {['income', 'expense'].map(t => (
           <button
@@ -160,7 +158,6 @@ export default function TransactionForm({ onSuccess }) {
         ))}
       </div>
 
-      {/* Subtipo (Tipo de Renda / Tipo de Gasto) */}
       <div>
         <label className={labelClass}>{subtypeLabel}</label>
         <div className="grid grid-cols-3 gap-2">
@@ -181,7 +178,6 @@ export default function TransactionForm({ onSuccess }) {
         </div>
       </div>
 
-      {/* Valor e Data */}
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>Valor (R$)</label>
@@ -210,7 +206,6 @@ export default function TransactionForm({ onSuccess }) {
         </div>
       </div>
 
-      {/* Modo de Pagamento: À vista vs Parcelado */}
       <div>
         <label className={labelClass}>Pagamento</label>
         <div className="grid grid-cols-2 gap-2">
@@ -239,7 +234,6 @@ export default function TransactionForm({ onSuccess }) {
         </div>
       </div>
 
-      {/* Campos de Parcelamento */}
       {form.is_installment && (
         <div className="grid grid-cols-2 gap-4 animate-fade-in bg-purple-500/5 p-3 rounded-xl border border-purple-500/10">
           <div>
@@ -269,7 +263,6 @@ export default function TransactionForm({ onSuccess }) {
         </div>
       )}
 
-      {/* Categoria */}
       <div>
         <label className={labelClass}>Categoria</label>
         <select name="category_id" value={form.category_id} onChange={handleChange} className={inputClass}>
@@ -280,7 +273,6 @@ export default function TransactionForm({ onSuccess }) {
         </select>
       </div>
 
-      {/* Descrição */}
       <div>
         <label className={labelClass}>Descrição</label>
         <input
@@ -294,7 +286,6 @@ export default function TransactionForm({ onSuccess }) {
         />
       </div>
 
-      {/* Status */}
       <div>
         <label className={labelClass}>Status</label>
         <select name="status" value={form.status} onChange={handleChange} className={inputClass}>

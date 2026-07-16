@@ -31,20 +31,16 @@ export default function App() {
         />
 
         <Routes>
-          {/* Landing page pública */}
           <Route path="/"         element={<Landing />}  />
 
-          {/* Auth */}
           <Route path="/login"    element={<Login />}    />
           <Route path="/register" element={<Register />} />
 
-          {/* Protegidas */}
           <Route path="/dashboard"    element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
           <Route path="/categories"   element={<ProtectedRoute><Categories /></ProtectedRoute>} />
           <Route path="/analytics"    element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
 
-          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>

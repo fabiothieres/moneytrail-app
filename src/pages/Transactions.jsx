@@ -25,7 +25,6 @@ function getMonthRange(monthStr) {
   return { start, end }
 }
 
-// Filtros de tipo: all | income | expense
 const TYPE_FILTERS = [
   { value: 'all',     label: 'Todos',     Icon: LayoutList,    active: 'bg-slate-700/50 text-white border-slate-600'        },
   { value: 'income',  label: 'Entradas',  Icon: TrendingUp,    active: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40' },
@@ -44,7 +43,6 @@ export default function Transactions() {
   const [typeFilter,   setTypeFilter]   = useState('all')   // 'all' | 'income' | 'expense'
   const [mockLoading,  setMockLoading]  = useState(false)
 
-  // Carrega categorias para o modal de edição
   useEffect(() => {
     if (!user) return
     supabase
@@ -75,7 +73,6 @@ export default function Transactions() {
       query = query.gte('date', start).lte('date', end)
     }
 
-    // Filtro de tipo (income / expense)
     if (typeFilter !== 'all') {
       query = query.eq('type', typeFilter)
     }
@@ -124,7 +121,6 @@ export default function Transactions() {
 
   return (
     <Layout>
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold text-white">Transações</h1>
@@ -135,7 +131,6 @@ export default function Transactions() {
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Filtro de mês */}
           <div className="flex items-center gap-2 bg-surface border border-surface-border rounded-xl px-3 py-1.5 focus-within:border-brand-500 focus-within:ring-1 focus-within:ring-brand-500 transition-all h-[38px]">
             <Filter size={14} className="text-surface-muted" />
             <input
@@ -146,7 +141,6 @@ export default function Transactions() {
             />
           </div>
           
-          {/* Botão Ver Todos */}
           <button
             onClick={() => setSelectedMonth(selectedMonth ? '' : new Date().toISOString().slice(0, 7))}
             className={`px-3 py-2 rounded-xl border text-sm font-medium transition-all h-[38px] ${
@@ -158,7 +152,6 @@ export default function Transactions() {
             Ver Todos
           </button>
 
-          {/* Mock import (Apenas admin) */}
           {user?.email === 'fabio_08cardoso@hotmail.com' && (
             <button
               onClick={handleMockImport}
@@ -174,7 +167,6 @@ export default function Transactions() {
         </div>
       </div>
 
-      {/* Filtros de tipo (Todos / Entradas / Saídas) */}
       <div className="flex gap-2 mb-6">
         {TYPE_FILTERS.map(f => (
           <button

@@ -13,19 +13,10 @@ const EXPENSE_SUBTYPES = [
   { value: 'investment',  label: 'Investimento'   },
 ]
 
-/**
- * EditTransactionModal
- * Props:
- *  - transaction: objeto completo da transação
- *  - categories:  array de categorias do usuário
- *  - onClose:     () => void
- *  - onSuccess:   () => void   (recarrega a lista)
- */
 export default function EditTransactionModal({ transaction, categories, onClose, onSuccess }) {
   const [form,    setForm]    = useState({ ...transaction })
   const [loading, setLoading] = useState(false)
 
-  // Fecha ao pressionar ESC
   useEffect(() => {
     const handler = (e) => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', handler)
@@ -90,7 +81,6 @@ export default function EditTransactionModal({ transaction, categories, onClose,
     >
       <div className="w-full max-w-md bg-surface-card border border-surface-border rounded-2xl shadow-2xl shadow-black/50 animate-slide-up">
 
-        {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-surface-border">
           <h2 className="text-base font-semibold text-white flex items-center gap-2">
             Editar Transação
@@ -108,10 +98,8 @@ export default function EditTransactionModal({ transaction, categories, onClose,
           </button>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto max-h-[75vh]">
 
-          {/* Tipo */}
           <div className="grid grid-cols-2 gap-2">
             {['income', 'expense'].map(t => (
               <button
@@ -131,7 +119,6 @@ export default function EditTransactionModal({ transaction, categories, onClose,
             ))}
           </div>
 
-          {/* Subtipo */}
           <div>
             <label className={labelClass}>{subtypeLabel}</label>
             <div className="grid grid-cols-3 gap-2">
@@ -152,7 +139,6 @@ export default function EditTransactionModal({ transaction, categories, onClose,
             </div>
           </div>
 
-          {/* Valor e Data */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>Valor (R$)</label>
@@ -180,7 +166,6 @@ export default function EditTransactionModal({ transaction, categories, onClose,
             </div>
           </div>
 
-          {/* Categoria */}
           <div>
             <label className={labelClass}>Categoria</label>
             <select name="category_id" value={form.category_id ?? ''} onChange={handleChange} className={inputClass}>
@@ -191,7 +176,6 @@ export default function EditTransactionModal({ transaction, categories, onClose,
             </select>
           </div>
 
-          {/* Descrição */}
           <div>
             <label className={labelClass}>Descrição</label>
             <input
@@ -204,7 +188,6 @@ export default function EditTransactionModal({ transaction, categories, onClose,
             />
           </div>
 
-          {/* Status */}
           <div>
             <label className={labelClass}>Status</label>
             <select name="status" value={form.status} onChange={handleChange} className={inputClass}>
@@ -214,7 +197,6 @@ export default function EditTransactionModal({ transaction, categories, onClose,
             </select>
           </div>
 
-          {/* Botões */}
           <div className="flex gap-3 pt-1">
             <button
               type="button"

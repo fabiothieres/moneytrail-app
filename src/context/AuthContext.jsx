@@ -1,12 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
-/**
- * AuthContext
- *
- * Fornece o estado de autenticação global via onAuthStateChange do Supabase.
- * As rotas privadas consomem este contexto para redirecionar usuários não autenticados.
- */
 const AuthContext = createContext(null)
 
 export function AuthProvider({ children }) {
@@ -15,14 +9,13 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Carrega a sessão atual (ex.: refresh de página)
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
     })
 
-    // Monitora mudanças de estado (login, logout, refresh de token)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setSession(session)
@@ -57,7 +50,6 @@ export function AuthProvider({ children }) {
   )
 }
 
-/** Hook de conveniência */
 export function useAuth() {
   const ctx = useContext(AuthContext)
   if (!ctx) throw new Error('useAuth deve ser usado dentro de <AuthProvider>')

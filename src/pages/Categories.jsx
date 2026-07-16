@@ -31,7 +31,6 @@ export default function Categories() {
 
   useEffect(() => { fetchCategories() }, [fetchCategories])
 
-  // Sincroniza o type do form com a aba ativa
   useEffect(() => {
     setForm(prev => ({ ...prev, type: tab }))
   }, [tab])
@@ -89,12 +88,10 @@ export default function Categories() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {/* Formulário de criação */}
         <div className="lg:col-span-1">
           <form onSubmit={handleAdd} className="bg-surface-card border border-surface-border rounded-2xl p-6 space-y-5 animate-slide-up">
             <h2 className="text-base font-semibold text-white">Nova Categoria</h2>
 
-            {/* Tipo */}
             <div className="grid grid-cols-2 gap-2">
               {[{ v:'income', l:'Entrada' }, { v:'expense', l:'Saída' }].map(t => (
                 <button
@@ -114,7 +111,6 @@ export default function Categories() {
               ))}
             </div>
 
-            {/* Nome */}
             <div>
               <label className={labelClass}>Nome</label>
               <input
@@ -128,7 +124,6 @@ export default function Categories() {
               />
             </div>
 
-            {/* Emoji */}
             <div>
               <label className={labelClass}>Ícone</label>
               <div className="grid grid-cols-8 gap-1.5">
@@ -149,7 +144,6 @@ export default function Categories() {
               </div>
             </div>
 
-            {/* Cor */}
             <div>
               <label className={labelClass}>Cor</label>
               <div className="flex flex-wrap gap-2">
@@ -167,7 +161,6 @@ export default function Categories() {
               </div>
             </div>
 
-            {/* Preview */}
             <div className="flex items-center gap-3 p-3 rounded-xl bg-surface border border-surface-border">
               <span
                 className="w-9 h-9 rounded-xl flex items-center justify-center text-lg"
@@ -191,9 +184,7 @@ export default function Categories() {
           </form>
         </div>
 
-        {/* Lista de categorias */}
         <div className="lg:col-span-2 space-y-4">
-          {/* Tabs */}
           <div className="flex gap-2">
             {[{ v:'expense', l:'Saídas' }, { v:'income', l:'Entradas' }].map(t => (
               <button

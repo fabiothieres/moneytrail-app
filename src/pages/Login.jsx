@@ -33,17 +33,14 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-surface flex items-center justify-center p-4">
-      {/* Background glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl" />
       </div>
 
       <div className="relative w-full max-w-md animate-slide-up">
-        {/* Card */}
         <div className="bg-surface-card border border-surface-border rounded-3xl p-8 shadow-2xl shadow-black/40">
 
-          {/* Logo */}
           <div className="flex flex-col items-center mb-8">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/40 mb-4">
               <Banknote size={28} className="text-white" />
@@ -53,7 +50,6 @@ export default function Login() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Email */}
             <div>
               <label className="block text-xs font-medium text-surface-muted mb-1.5">E-mail</label>
               <div className="relative">
@@ -71,7 +67,6 @@ export default function Login() {
               </div>
             </div>
 
-            {/* Senha */}
             <div>
               <label className="block text-xs font-medium text-surface-muted mb-1.5">Senha</label>
               <div className="relative">
@@ -96,7 +91,6 @@ export default function Login() {
               </div>
             </div>
 
-            {/* Submit */}
             <button
               type="submit"
               id="login-submit"

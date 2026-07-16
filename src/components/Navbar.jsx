@@ -27,7 +27,6 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
 
-          {/* Logo */}
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-500/30">
               <Banknote size={16} className="text-white" />
@@ -35,7 +34,6 @@ export default function Navbar() {
             <span className="font-bold text-white text-lg tracking-tight">MoneyTrail</span>
           </div>
 
-          {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
             {NAV_ITEMS.map(({ to, label, Icon }) => (
               <NavLink
@@ -56,7 +54,6 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* User & logout */}
           <div className="hidden md:flex items-center gap-3">
             <span className="text-xs text-surface-muted truncate max-w-[160px]">{user?.email}</span>
             <button
@@ -68,7 +65,6 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Mobile hamburger */}
           <button
             onClick={() => setOpen(!open)}
             className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 transition-colors"
@@ -78,7 +74,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {open && (
         <div className="md:hidden border-t border-surface-border bg-surface-card animate-slide-up">
           <div className="px-4 py-3 space-y-1">

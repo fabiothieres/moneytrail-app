@@ -6,7 +6,6 @@ import {
   CheckCircle2, Sparkles, TrendingUp
 } from 'lucide-react'
 
-/* ── Dados das seções ─────────────────────────────────────── */
 const FEATURES = [
   {
     Icon: Wallet,
@@ -65,16 +64,12 @@ const STEPS = [
   { step: '03', title: 'Acompanhe tudo', desc: 'Dashboard, gráficos e filtros por mês. Controle total.' },
 ]
 
-/* ── Componente Landing Page ──────────────────────────────── */
 export default function Landing() {
   const { user } = useAuth()
 
   return (
     <div className="min-h-screen bg-surface text-white overflow-x-hidden">
 
-      {/* ═══════════════════════════════════════════════════════
-          NAVBAR
-      ═══════════════════════════════════════════════════════ */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-surface/80 backdrop-blur-xl border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5 group">
@@ -101,18 +96,13 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* ═══════════════════════════════════════════════════════
-          HERO
-      ═══════════════════════════════════════════════════════ */}
       <section className="relative pt-32 pb-20 lg:pt-44 lg:pb-32">
-        {/* Background effects */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-brand-500/8 rounded-full blur-[120px]" />
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-500/8 rounded-full blur-[100px]" />
           <div className="absolute top-40 right-1/3 w-[300px] h-[300px] bg-blue-500/5 rounded-full blur-[80px]" />
         </div>
 
-        {/* Grid pattern overlay */}
         <div className="absolute inset-0 pointer-events-none opacity-[0.015]"
           style={{
             backgroundImage: 'linear-gradient(rgba(255,255,255,.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.1) 1px, transparent 1px)',
@@ -122,7 +112,6 @@ export default function Landing() {
 
         <div className="relative max-w-7xl mx-auto px-6">
           <div className="max-w-3xl mx-auto text-center">
-            {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-medium mb-8 animate-fade-in">
               <Sparkles size={14} />
               Gestão financeira pessoal — 100% gratuito
@@ -141,7 +130,6 @@ export default function Landing() {
               Dashboard inteligente, gráficos e navegação por mês — tudo em um só lugar.
             </p>
 
-            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up">
               <Link
                 to="/register"
@@ -161,10 +149,8 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* ── Dashboard Preview Card ───────────────────────── */}
           <div className="mt-20 max-w-4xl mx-auto animate-slide-up">
             <div className="relative rounded-2xl border border-white/10 bg-surface-card/80 backdrop-blur-xl shadow-2xl shadow-black/40 overflow-hidden">
-              {/* Faux browser top bar */}
               <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5 bg-white/[.02]">
                 <div className="flex gap-1.5">
                   <div className="w-3 h-3 rounded-full bg-red-500/60" />
@@ -178,7 +164,6 @@ export default function Landing() {
                 </div>
               </div>
 
-              {/* Dashboard mock content */}
               <div className="p-6 sm:p-8">
                 <div className="flex items-center justify-between mb-6">
                   <div>
@@ -190,7 +175,6 @@ export default function Landing() {
                   </div>
                 </div>
 
-                {/* KPI Cards grid */}
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {[
                     { label: 'Saldo Total',     value: 'R$ 12.450,00', color: 'text-brand-400', Icon: Wallet },
@@ -211,16 +195,12 @@ export default function Landing() {
                 </div>
               </div>
 
-              {/* Gradient fade at bottom */}
               <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-surface-card to-transparent" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          STATS BAR
-      ═══════════════════════════════════════════════════════ */}
       <section className="relative py-12 border-y border-white/5 bg-white/[.01]">
         <div className="max-w-5xl mx-auto px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8">
@@ -236,9 +216,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          FEATURES
-      ═══════════════════════════════════════════════════════ */}
       <section id="features" className="relative py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -263,7 +240,6 @@ export default function Landing() {
                 key={i}
                 className="group relative bg-surface-card/60 border border-white/5 rounded-2xl p-6 hover:bg-surface-card hover:border-white/10 transition-all duration-300 hover:shadow-xl"
               >
-                {/* Icon */}
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${f.color} flex items-center justify-center mb-4 shadow-lg ${f.glow} group-hover:scale-110 transition-transform duration-300`}>
                   <f.Icon size={22} className="text-white" />
                 </div>
@@ -275,9 +251,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          HOW IT WORKS
-      ═══════════════════════════════════════════════════════ */}
       <section className="relative py-24 lg:py-32 border-t border-white/5">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-1/2 left-0 w-[600px] h-[400px] bg-brand-500/5 rounded-full blur-[120px]" />
@@ -299,7 +272,6 @@ export default function Landing() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {STEPS.map((s, i) => (
               <div key={i} className="relative bg-surface-card/60 border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all duration-300">
-                {/* Step number */}
                 <span className="text-5xl font-black bg-gradient-to-b from-white/10 to-transparent bg-clip-text text-transparent select-none">
                   {s.step}
                 </span>
@@ -312,9 +284,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          FINAL CTA
-      ═══════════════════════════════════════════════════════ */}
       <section className="relative py-24 lg:py-32">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute bottom-0 right-1/3 w-[500px] h-[500px] bg-brand-500/8 rounded-full blur-[120px]" />
@@ -343,9 +312,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          FOOTER
-      ═══════════════════════════════════════════════════════ */}
       <footer className="border-t border-white/5 py-8">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">

@@ -1,6 +1,5 @@
 import Navbar from './Navbar'
 
-/** Layout padrão das páginas autenticadas */
 export default function Layout({ children }) {
   return (
     <div className="min-h-screen bg-surface font-sans">

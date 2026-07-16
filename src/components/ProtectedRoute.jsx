@@ -1,11 +1,6 @@
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
-/**
- * Componente de rota protegida.
- * Redireciona para /login se o usuário não estiver autenticado.
- * Mostra um spinner enquanto a sessão está sendo carregada.
- */
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
 

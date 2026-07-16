@@ -11,10 +11,6 @@ function formatBRL(n = 0) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(n)
 }
 
-/**
- * Dashboard — Consome a RPC get_financial_summary.
- * Um único RPC call retorna todos os agregados — sem SELECT * irrestrito.
- */
 export default function Dashboard() {
   const [summary, setSummary] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -88,7 +84,6 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Dashboard</h1>
@@ -121,7 +116,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Cards — grid 3x2 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {stats.map((s, i) => (
           <StatCard
@@ -136,7 +130,6 @@ export default function Dashboard() {
         ))}
       </div>
 
-      {/* Info footer */}
       <div className="mt-8 p-4 rounded-xl border border-surface-border bg-surface-card/50 text-xs text-surface-muted flex items-center gap-2">
         <BarChart3 size={14} className="text-brand-500 flex-shrink-0" />
         Os totais são calculados no banco de dados via função RPC segura — nenhum dado sensível é exposto ao front-end.

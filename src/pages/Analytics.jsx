@@ -9,7 +9,6 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
 } from 'recharts'
 
-// ─── Paleta de cores para os gráficos ───────────────────────
 const CHART_COLORS = [
   '#22c55e','#3b82f6','#f97316','#a855f7','#ec4899',
   '#eab308','#14b8a6','#6366f1','#ef4444','#06b6d4',
@@ -25,7 +24,6 @@ function formatBRLShort(n) {
   return `R$${n.toFixed(0)}`
 }
 
-// Tooltip customizado
 function CustomTooltip({ active, payload }) {
   if (!active || !payload?.length) return null
   const d = payload[0]
@@ -37,7 +35,6 @@ function CustomTooltip({ active, payload }) {
   )
 }
 
-// Componente de gráfico individual com toggle pizza/barras
 function ChartCard({ title, data, colorOffset = 0, loading }) {
   const [chartType, setChartType] = useState('pie') // 'pie' | 'bar'
 
@@ -48,7 +45,6 @@ function ChartCard({ title, data, colorOffset = 0, loading }) {
 
   return (
     <div className="bg-surface-card border border-surface-border rounded-2xl p-6 animate-slide-up">
-      {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-base font-semibold text-white">{title}</h2>
         <div className="flex gap-1 bg-surface rounded-lg p-1 border border-surface-border">
@@ -140,7 +136,6 @@ function ChartCard({ title, data, colorOffset = 0, loading }) {
   )
 }
 
-// ─── Página principal Analytics ──────────────────────────────
 export default function Analytics() {
   const { user } = useAuth()
   const [expenseData, setExpenseData] = useState([])
@@ -173,9 +168,8 @@ export default function Analytics() {
       return
     }
 
-    // Gastos: agrupados por categoria
     const expenseMap = {}
-    // Entradas: agrupadas por subtipo (Fixa / Variável)
+
     const SUBTYPE_LABEL = { fixed: 'Renda Fixa', variable: 'Renda Variável' }
     const incomeMap  = {}
 
@@ -203,7 +197,6 @@ export default function Analytics() {
 
   return (
     <Layout>
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold text-white">Gráficos</h1>
@@ -213,7 +206,6 @@ export default function Analytics() {
         </div>
         
         <div className="flex items-center gap-2 flex-wrap">
-          {/* Filtro de mês */}
           <div className="flex items-center gap-2 bg-surface border border-surface-border rounded-xl px-3 py-1.5 focus-within:border-brand-500 focus-within:ring-1 focus-within:ring-brand-500 transition-all h-[38px]">
             <Filter size={14} className="text-surface-muted" />
             <input

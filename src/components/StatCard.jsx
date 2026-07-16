@@ -1,14 +1,4 @@
-/**
- * StatCard — Cartão de KPI para o Dashboard.
- *
- * Props:
- *  - title:     string
- *  - value:     number | string
- *  - Icon:      lucide component
- *  - trend:     'up' | 'down' | 'neutral'
- *  - color:     string (classe Tailwind para a cor do ícone/accent)
- *  - loading:   boolean
- */
+
 export default function StatCard({ title, value, Icon, trend = 'neutral', color = 'brand', loading = false }) {
   const colorMap = {
     brand:  { bg: 'bg-brand-500/10',   text: 'text-brand-400',   border: 'border-brand-500/20'  },
@@ -25,7 +15,6 @@ export default function StatCard({ title, value, Icon, trend = 'neutral', color 
 
   return (
     <div className={`relative overflow-hidden rounded-2xl border ${c.border} bg-surface-card p-6 animate-slide-up transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-black/30`}>
-      {/* Glow background */}
       <div className={`absolute -top-8 -right-8 w-32 h-32 rounded-full blur-3xl opacity-20 ${c.bg}`} />
 
       <div className="relative z-10">

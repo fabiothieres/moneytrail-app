@@ -1,158 +1,82 @@
-# MoneyTrail — Sistema de Gerenciamento Financeiro SaaS
+# 💵 MoneyTrail
 
-> Stack: **React 18 + Vite 5** · **Tailwind CSS** · **Supabase (PostgreSQL + Auth)** · **GitHub Actions**
+<div align="center">
+  <img src="./public/favicon.svg" alt="MoneyTrail Logo" width="80" height="80" />
+  <p><strong>A trilha do seu dinheiro. Gestão financeira inteligente, segura e gratuita.</strong></p>
+</div>
+
+![MoneyTrail Preview](https://moneytrail-fabio.vercel.app/favicon.svg) <!-- Você pode depois trocar esse link por um print real do sistema -->
+
+**MoneyTrail** é uma aplicação web full-stack focada no controle financeiro pessoal e empresarial. Projetado para ser intuitivo e direto ao ponto, o sistema oferece desde o registro simples de receitas e despesas até a automação do cálculo de parcelamentos em meses futuros, tudo protegido por uma arquitetura serverless robusta.
+
+🌐 **Acesse ao vivo:** [moneytrail-fabio.vercel.app](https://moneytrail-fabio.vercel.app/)
 
 ---
 
-## 🚀 Como rodar localmente
+## ✨ Principais Funcionalidades
 
+- **Dashboard Analítico:** 6 KPIs processados via RPC no banco de dados, mostrando saldos totais e do mês selecionado.
+- **Gráficos Interativos:** Visualização de despesas e receitas usando gráficos de pizza e barras, facilitando a identificação de padrões de consumo.
+- **Gestão de Parcelamentos:** Algoritmo que gera automaticamente as parcelas futuras para transações divididas no cartão de crédito, distribuindo os gastos nos meses corretos.
+- **Navegação Temporal:** Filtre e navegue de forma global entre meses passados e futuros para visualizar fluxos de caixa isolados.
+- **Categorização Personalizada:** Crie categorias próprias para organizar melhor seus gastos.
+- **Autenticação Segura:** Login, registro e proteção de rotas implementados no Front-end e no Back-end.
+
+## 🛠️ Tecnologias Utilizadas
+
+### Front-end
+- **React.js** (via Vite)
+- **Tailwind CSS** (Estilização responsiva e UI moderna)
+- **React Router v6** (Navegação SPA)
+- **Lucide React** (Ícones)
+- **Recharts** (Gráficos)
+- **React Hot Toast** (Notificações visuais)
+
+### Back-end & Infraestrutura
+- **Supabase** (BaaS)
+- **PostgreSQL** (Banco de dados relacional)
+- **Row Level Security (RLS)** (Políticas rigorosas garantindo que usuários acessem apenas seus próprios dados)
+- **Postgres RPC (Remote Procedure Calls)** (Cálculo de totalizadores direto no banco de dados para ganho extremo de performance)
+- **Vercel** (Hospedagem e CI/CD)
+
+---
+
+## 🚀 Como rodar o projeto localmente
+
+### 1. Clone o repositório
 ```bash
-# 1. Clone o repositório
-git clone <url-do-repo>
-cd moneytrail
+git clone https://github.com/fabiothieres/finflow-app.git
+cd finflow-app
+```
 
-# 2. Instale as dependências
+### 2. Instale as dependências
+```bash
 npm install
+```
 
-# 3. Configure as variáveis de ambiente
-cp .env.example .env
-# Edite .env com suas credenciais do Supabase
+### 3. Configuração do Ambiente (Supabase)
+Crie um projeto no [Supabase](https://supabase.com/) e rode os arquivos SQL da pasta raiz (`database-setup.sql`, `migration-installments.sql`, etc.) no SQL Editor para criar as tabelas e funções.
 
-# 4. Inicie o servidor de desenvolvimento
+Crie um arquivo `.env` na raiz do projeto com suas credenciais:
+```env
+VITE_SUPABASE_URL=sua_url_do_supabase
+VITE_SUPABASE_ANON_KEY=sua_anon_key_do_supabase
+```
+
+### 4. Rode a aplicação
+```bash
 npm run dev
 ```
+Acesse `http://localhost:5173`.
 
 ---
 
-## 🗄️ Configuração do Banco de Dados (Supabase)
+## 🔒 Segurança em Destaque
 
-1. Acesse [app.supabase.com](https://app.supabase.com) → seu projeto
-2. Vá em **SQL Editor**
-3. Cole e execute o conteúdo de [`database-setup.sql`](./database-setup.sql)
-
-O script criará automaticamente:
-- ✅ Tabela `categories` com RLS
-- ✅ Tabela `transactions` com RLS
-- ✅ Função RPC `get_financial_summary()`
-- ✅ Trigger de categorias padrão (12 categorias inseridas no primeiro login)
+Neste projeto, a segurança dos dados é garantida através do **Row Level Security (RLS)** do PostgreSQL. Políticas (`Policies`) foram escritas diretamente nas tabelas (`transactions` e `categories`), exigindo o `auth.uid()` correspondente em todas as ações de CRUD. Dessa forma, mesmo que as chaves de API públicas sejam expostas, os dados continuam impenetráveis.
 
 ---
 
-## 🔐 Arquitetura de Segurança
-
-### Row Level Security (RLS)
-
-Todas as tabelas possuem RLS ativo com a política:
-
-```sql
--- Exemplo: transactions
-USING (auth.uid() = user_id)
-```
-
-Isso significa que **mesmo que o front-end faça uma query sem filtro**, o PostgreSQL só retornará os registros do usuário autenticado pelo JWT. O front-end não tem autoridade — a segurança está no banco de dados.
-
-### Proteção de Cota de Leituras
-
-| Estratégia | Implementação |
-|---|---|
-| **Paginação** | Máx. 20 itens por query (`.range()` no Supabase) |
-| **Filtro de mês** | Dashboard e Transações filtram por mês atual por padrão |
-| **RPC agregado** | Dashboard usa `get_financial_summary()` — 1 chamada, sem `SELECT *` |
-| **Sem wildcards** | Todas as queries têm colunas explícitas ou são chamadas de função |
-
-### Variáveis de Ambiente
-
-```env
-VITE_SUPABASE_URL=https://xxxxx.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGci...
-```
-
-> ⚠️ **Nunca commite o arquivo `.env`!** Use `.env.example` como template.
-> A chave `anon` é segura para o front-end pois o RLS protege os dados no banco.
-
----
-
-## ⚙️ CI/CD: Prevenção de Inatividade (GitHub Actions)
-
-O Supabase pausa projetos gratuitos após **7 dias sem atividade**. O workflow `.github/workflows/keep-alive.yml` executa automaticamente a cada **4 dias** e faz um ping na API REST do Supabase.
-
-### Configurar Secrets no GitHub
-
-1. Vá em **Settings → Secrets and variables → Actions**
-2. Adicione:
-   - `SUPABASE_URL` → URL do seu projeto Supabase
-   - `SUPABASE_ANON_KEY` → Chave anon pública
-
----
-
-## 📁 Estrutura do Projeto
-
-```
-moneytrail/
-├── .github/
-│   └── workflows/
-│       └── keep-alive.yml     # CI: previne hibernação do Supabase
-├── src/
-│   ├── components/
-│   │   ├── Layout.jsx         # Layout wrapper com Navbar
-│   │   ├── Navbar.jsx         # Navegação responsiva com glassmorphism
-│   │   ├── ProtectedRoute.jsx # Guard para rotas privadas
-│   │   ├── StatCard.jsx       # Card KPI com animações
-│   │   ├── TransactionForm.jsx# Formulário de inserção rápida
-│   │   └── TransactionList.jsx# Lista paginada com tabela
-│   ├── context/
-│   │   └── AuthContext.jsx    # Gerenciamento de sessão Supabase
-│   ├── lib/
-│   │   └── supabase.js        # Cliente Supabase singleton
-│   ├── pages/
-│   │   ├── Login.jsx          # Tela de login
-│   │   ├── Register.jsx       # Tela de cadastro
-│   │   ├── Dashboard.jsx      # KPIs via RPC
-│   │   └── Transactions.jsx   # CRUD + Mock API
-│   ├── App.jsx                # Rotas e providers
-│   ├── main.jsx               # Entry point React
-│   └── index.css              # Tailwind + fontes globais
-├── database-setup.sql         # DDL completo com RLS
-├── .env.example               # Template de variáveis
-├── tailwind.config.js
-├── postcss.config.js
-└── vite.config.js
-```
-
----
-
-## 🧪 Mock API
-
-Na página **Transações**, o botão **⚡ Mock API** importa 5 transações de demonstração diretamente para o banco via insert em lote:
-
-```js
-// src/pages/Transactions.jsx
-const MOCK_TRANSACTIONS = [
-  { type: 'income',  amount: 5000.00, description: 'Salário Julho',       ... },
-  { type: 'expense', amount:  850.00, description: 'Aluguel',             ... },
-  { type: 'expense', amount:  320.50, description: 'Supermercado',        ... },
-  { type: 'income',  amount:  750.00, description: 'Freelance Design',    ... },
-  { type: 'expense', amount:   99.90, description: 'Assinatura Adobe CC', ... },
-]
-```
-
----
-
-## 📦 Dependências Principais
-
-| Pacote | Versão | Função |
-|---|---|---|
-| `react` | 18 | UI library |
-| `vite` | 5 | Build tool |
-| `tailwindcss` | 3 | Estilização utilitária |
-| `react-router-dom` | 6 | Roteamento SPA |
-| `@supabase/supabase-js` | latest | Cliente Supabase |
-| `lucide-react` | latest | Ícones SVG |
-| `react-hot-toast` | latest | Notificações toast |
-| `date-fns` | latest | Formatação de datas |
-
----
-
-## 📄 Licença
-
-MIT — livre para uso pessoal e comercial.
+<div align="center">
+  Desenvolvido por Fábio Santana.
+</div>
