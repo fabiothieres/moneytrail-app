@@ -5,7 +5,8 @@
   <p><strong>A trilha do seu dinheiro. Gestão financeira inteligente, segura e gratuita.</strong></p>
 </div>
 
-![MoneyTrail Preview](https://moneytrail-fabio.vercel.app/favicon.svg) <!-- Você pode depois trocar esse link por um print real do sistema -->
+<img width="1920" height="1033" alt="image" src="https://github.com/user-attachments/assets/c892294c-6de3-4160-8744-930a5b96148c" />
+
 
 **MoneyTrail** é uma aplicação web full-stack focada no controle financeiro pessoal e empresarial. Projetado para ser intuitivo e direto ao ponto, o sistema oferece desde o registro simples de receitas e despesas até a automação do cálculo de parcelamentos em meses futuros, tudo protegido por uma arquitetura serverless robusta.
 
@@ -78,5 +79,5 @@ Neste projeto, a segurança dos dados é garantida através do **Row Level Secur
 ---
 
 <div align="center">
-  Desenvolvido por Fábio Santana.
+  Desenvolvido por <a href="https://www.linkedin.com/in/fabio-thieres-00b320265/" target="_blank">Fabio Thieres</a>
 </div>
