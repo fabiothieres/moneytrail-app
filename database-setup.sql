@@ -1,17 +1,5 @@
--- ============================================================
--- SISTEMA DE GERENCIAMENTO FINANCEIRO — DATABASE SETUP
--- Execute este script no SQL Editor do seu projeto Supabase
--- Script idempotente: pode ser re-executado sem erros
--- ============================================================
-
--- ─────────────────────────────────────────────────────────────
--- 1. EXTENSÕES
--- ─────────────────────────────────────────────────────────────
 create extension if not exists "uuid-ossp";
 
--- ─────────────────────────────────────────────────────────────
--- 2. TABELA: categories
--- ─────────────────────────────────────────────────────────────
 create table if not exists public.categories (
   id          uuid primary key default uuid_generate_v4(),
   user_id     uuid not null references auth.users(id) on delete cascade,
@@ -22,13 +10,10 @@ create table if not exists public.categories (
   created_at  timestamptz default now() not null
 );
 
--- Índice para lookup por user
 create index if not exists idx_categories_user_id on public.categories(user_id);
 
--- RLS: habilitar
 alter table public.categories enable row level security;
 
--- Políticas RLS — categories (drop antes para evitar erro de duplicata)
 drop policy if exists "categories: select own" on public.categories;
 drop policy if exists "categories: insert own" on public.categories;
 drop policy if exists "categories: update own" on public.categories;
@@ -52,9 +37,6 @@ create policy "categories: delete own"
   using (auth.uid() = user_id);
 
 
--- ─────────────────────────────────────────────────────────────
--- 3. TABELA: transactions
--- ─────────────────────────────────────────────────────────────
 create table if not exists public.transactions (
   id            uuid primary key default uuid_generate_v4(),
   user_id       uuid not null references auth.users(id) on delete cascade,
@@ -64,18 +46,20 @@ create table if not exists public.transactions (
   date          date not null default current_date,
   description   text,
   status        text not null default 'confirmed' check (status in ('confirmed', 'pending', 'cancelled')),
+  income_subtype  text check (income_subtype in ('fixed', 'variable')),
+  expense_subtype text check (expense_subtype in ('essential', 'superfluous', 'investment')),
+  is_installment      boolean default false,
+  installment_current integer,
+  installment_total   integer,
   created_at    timestamptz default now() not null
 );
 
--- Índices para buscas frequentes
 create index if not exists idx_transactions_user_id   on public.transactions(user_id);
 create index if not exists idx_transactions_date      on public.transactions(date desc);
 create index if not exists idx_transactions_user_date on public.transactions(user_id, date desc);
 
--- RLS: habilitar
 alter table public.transactions enable row level security;
 
--- Políticas RLS — transactions (drop antes para evitar erro de duplicata)
 drop policy if exists "transactions: select own" on public.transactions;
 drop policy if exists "transactions: insert own" on public.transactions;
 drop policy if exists "transactions: update own" on public.transactions;
@@ -99,26 +83,27 @@ create policy "transactions: delete own"
   using (auth.uid() = user_id);
 
 
--- ─────────────────────────────────────────────────────────────
--- 4. FUNÇÃO RPC: get_financial_summary
---    Retorna o saldo consolidado e do mês atual do usuário
---    (evita SELECT * irrestrito — só retorna agregados)
--- ─────────────────────────────────────────────────────────────
-create or replace function public.get_financial_summary()
+create or replace function public.get_financial_summary(p_year int default null, p_month int default null)
 returns json
 language plpgsql
 security definer
 set search_path = public
 as $$
 declare
-  v_uid          uuid := auth.uid();
+  v_uid           uuid := auth.uid();
   v_total_income  numeric := 0;
   v_total_expense numeric := 0;
   v_month_income  numeric := 0;
   v_month_expense numeric := 0;
+  v_target_date   date;
 begin
 
-  -- Totais consolidados
+  if p_year is null or p_month is null then
+    v_target_date := current_date;
+  else
+    v_target_date := make_date(p_year, p_month, 1);
+  end if;
+
   select
     coalesce(sum(case when type = 'income'  then amount else 0 end), 0),
     coalesce(sum(case when type = 'expense' then amount else 0 end), 0)
@@ -127,7 +112,6 @@ begin
   where user_id = v_uid
     and status  = 'confirmed';
 
-  -- Totais do mês atual
   select
     coalesce(sum(case when type = 'income'  then amount else 0 end), 0),
     coalesce(sum(case when type = 'expense' then amount else 0 end), 0)
@@ -135,7 +119,7 @@ begin
   from public.transactions
   where user_id = v_uid
     and status  = 'confirmed'
-    and date_trunc('month', date) = date_trunc('month', current_date);
+    and date_trunc('month', date) = date_trunc('month', v_target_date);
 
   return json_build_object(
     'total_income',   v_total_income,
@@ -149,14 +133,10 @@ begin
 end;
 $$;
 
--- Revoke public execute, allow only authenticated users
-revoke execute on function public.get_financial_summary() from public;
-grant  execute on function public.get_financial_summary() to authenticated;
+revoke execute on function public.get_financial_summary(int, int) from public;
+grant  execute on function public.get_financial_summary(int, int) to authenticated;
 
 
--- ─────────────────────────────────────────────────────────────
--- 5. CATEGORIAS PADRÃO (inseridas via trigger no primeiro login)
--- ─────────────────────────────────────────────────────────────
 create or replace function public.seed_default_categories()
 returns trigger
 language plpgsql
@@ -181,13 +161,7 @@ begin
 end;
 $$;
 
--- Trigger: dispara após novo usuário ser criado no auth.users
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute procedure public.seed_default_categories();
-
-
--- ─────────────────────────────────────────────────────────────
--- FIM DO SCRIPT
--- ─────────────────────────────────────────────────────────────
