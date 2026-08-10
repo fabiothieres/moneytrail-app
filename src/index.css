@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -42,7 +42,266 @@
   }
 }
 
+/* ── Landing Page Animations ─────────────────────────────── */
+
+/* Scroll-triggered entrance animations */
+.scroll-fade-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-fade-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-fade-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-fade-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-fade-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-scale-in {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.scroll-scale-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Staggered delays for children */
+.stagger-1 { transition-delay: 0.05s; }
+.stagger-2 { transition-delay: 0.1s; }
+.stagger-3 { transition-delay: 0.15s; }
+.stagger-4 { transition-delay: 0.2s; }
+.stagger-5 { transition-delay: 0.25s; }
+.stagger-6 { transition-delay: 0.3s; }
+
+/* ── 3D Credit Card ─────────────────────────────────────── */
+.credit-card-3d {
+  perspective: 1200px;
+  width: 380px;
+  height: 240px;
+}
+
+.credit-card-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #D49A2A 0%, #8B6914 40%, #E4C04A 70%, #B47B1E 100%);
+  box-shadow:
+    0 25px 60px rgba(212, 154, 42, 0.25),
+    0 0 80px rgba(212, 154, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  transform: rotateY(-12deg) rotateX(8deg) rotateZ(-2deg);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  padding: 28px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.credit-card-inner:hover {
+  transform: rotateY(-5deg) rotateX(3deg) rotateZ(0deg);
+}
+
+/* Card shine overlay */
+.credit-card-inner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.08) 45%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.08) 55%,
+    transparent 70%
+  );
+  animation: cardShine 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes cardShine {
+  0%, 100% { transform: translateX(-80%) translateY(-80%) rotate(25deg); }
+  50% { transform: translateX(80%) translateY(80%) rotate(25deg); }
+}
+
+/* Card chip */
+.card-chip {
+  width: 45px;
+  height: 34px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #f0d78c 0%, #c9a84c 50%, #f0d78c 100%);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.card-chip::after {
+  content: '';
+  position: absolute;
+  top: 6px; left: 8px; right: 8px; bottom: 6px;
+  border: 1.5px solid rgba(139, 105, 20, 0.4);
+  border-radius: 3px;
+}
+
+/* Card contactless icon */
+.card-contactless {
+  width: 24px;
+  height: 24px;
+  position: relative;
+}
+
+.card-contactless span {
+  position: absolute;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 50%;
+  border-left-color: transparent;
+  border-bottom-color: transparent;
+  transform: rotate(-45deg);
+}
+
+.card-contactless span:nth-child(1) { width: 10px; height: 10px; bottom: 0; left: 0; }
+.card-contactless span:nth-child(2) { width: 16px; height: 16px; bottom: 0; left: 0; }
+.card-contactless span:nth-child(3) { width: 22px; height: 22px; bottom: 0; left: 0; }
+
+/* Second card (behind) */
+.credit-card-back {
+  position: absolute;
+  width: 380px;
+  height: 240px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #1C1C26 0%, #2A2A38 50%, #1C1C26 100%);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  transform: rotateY(-8deg) rotateX(5deg) rotateZ(-1deg) translateZ(-40px) translateX(15px) translateY(20px);
+  border: 1px solid rgba(212, 154, 42, 0.15);
+}
+
+/* Contain card visual within bounds */
+.credit-card-3d,
+.credit-card-back {
+  max-width: 100%;
+}
+
+/* ── Glassmorphism ───────────────────────────────────────── */
+.glass {
+  background: rgba(19, 19, 26, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-gold {
+  background: rgba(212, 154, 42, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 154, 42, 0.12);
+}
+
+/* ── Gold Gradient Text ──────────────────────────────────── */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #EABE63, #D49A2A, #E4AB3A);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Shimmer Button ──────────────────────────────────────── */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.15),
+    transparent
+  );
+  animation: btnShimmer 3s ease-in-out infinite;
+}
+
+@keyframes btnShimmer {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
+}
+
+/* ── Sparkle Particles ───────────────────────────────────── */
+.sparkle-particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #E4AB3A;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.sparkle-star {
+  position: absolute;
+  color: #E4AB3A;
+  pointer-events: none;
+  font-size: 12px;
+}
+
 /* ── Utilities extras ────────────────────────────────────── */
 @layer utilities {
   .hover\:bg-white\/3:hover { background-color: rgba(255,255,255,.03); }
+}
+
+/* ── Responsive 3D Card ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .credit-card-3d {
+    width: 300px;
+    height: 190px;
+  }
+  
+  .credit-card-back {
+    width: 300px;
+    height: 190px;
+  }
+}
+
+@media (max-width: 480px) {
+  .credit-card-3d {
+    width: 260px;
+    height: 165px;
+  }
+  
+  .credit-card-back {
+    width: 260px;
+    height: 165px;
+  }
 }

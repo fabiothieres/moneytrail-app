@@ -1,13 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- Back note -->
-  <rect x="10" y="6" width="44" height="26" rx="4" fill="#86efac" stroke="#166534" stroke-width="2.5"/>
-  <!-- Middle note -->
-  <rect x="6" y="14" width="44" height="26" rx="4" fill="#a7f3d0" stroke="#166534" stroke-width="2.5"/>
-  <!-- Front note -->
-  <rect x="2" y="22" width="44" height="26" rx="4" fill="#d1fae5" stroke="#166534" stroke-width="2.5"/>
-  <!-- Dollar circles -->
-  <circle cx="10" cy="35" r="3.5" fill="none" stroke="#166534" stroke-width="2"/>
-  <circle cx="38" cy="35" r="3.5" fill="none" stroke="#166534" stroke-width="2"/>
-  <!-- Dollar sign -->
-  <text x="24" y="40" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-weight="800" font-size="18" fill="#166534">$</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#E4AB3A"/>
+      <stop offset="100%" stop-color="#B47B1E"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="url(#g)"/>
+  <text x="16" y="22" text-anchor="middle" fill="white" font-family="system-ui" font-weight="800" font-size="16">M</text>
 </svg>
